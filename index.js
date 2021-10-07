@@ -1,16 +1,3 @@
-let now = new Date();
-
-let date = now.getDate();
-let hours = now.getHours();
-let minutes = now.getMinutes();
-if (hours < 10) {
-  hours = `0${hours}`;
-}
-
-if (minutes < 10) {
-  minutes = `0${minutes}`;
-}
-
 let days = [
   "Sunday",
   "Monday",
@@ -18,66 +5,52 @@ let days = [
   "Wednesday",
   "Thursday",
   "Friday",
-  "Saturday"
+  "Saturday",
 ];
-let day = days[now.getDay()];
 
-let months = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December"
-];
-let month = months[now.getMonth()];
+let now = new Date();
+let formattedDayTime = document.querySelector("#date-time");
+let currentDay = days[now.getDay()];
+let currentHour = now.getHours();
+let currentMinutes = now.getMinutes();
 
-let h3 = document.querySelector("h3");
-h3.innerHTML = `${day}, ${month} ${date}  ${hours}:${minutes}`;
+formattedDayTime.innerHTML = `${currentDay}, ${currentHour}:${currentMinutes}`;
 
-function changeToCelsius(event) {
-  event.preventDefault();
-  let currentTemperature = document.querySelector(".current-temperature");
-  currentTemperature.innerHTML = 30;
-}
+let cityInput = document.querySelector("#city-search");
 
-function changeToFahrenheit(event) {
-  event.preventDefault();
-  let currentTemperature = document.querySelector(".current-temperature");
-  currentTemperature.innerHTML = 86;
-}
-
-let celsiusLink = document.querySelector(".celsius");
-celsiusLink.addEventListener("click", changeToCelsius);
-
-let fahrenheitLink = document.querySelector(".fahrenheit");
-fahrenheitLink.addEventListener("click", changeToFahrenheit);
-
-function displayWeatherCondition(response) {
-  console.log(response.data.name);
-  document.querySelector("#city").innerHTML = response.data.name;
-  document.querySelector("#temperature").innerHTML = Math.round(
+function currentWeather(response) {
+  let cityElement = document.querySelector("#city");
+  document.querySelector("#temp-now").innerHTML = Math.round(
     response.data.main.temp
   );
-  document.querySelector("#humidity").innerHTML = response.data.main.humidity;
+  cityElement.innerHTML = cityInput.value;
 }
 
-function searchCity(city) {
-  let apiKey = "e1dc50a50162a6d23d9d39ff29473802";
-  let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
-  axios.get(`${apiUrl}&appid=${apiKey}`).then(displayWeatherCondition);
+function searchCity(response) {
+  let apiKey = "29ed711e6c528e8877439d3d2d9efee4";
+  let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${cityInput.value}&units=metric`;
+  axios.get(`${apiUrl}&appid=${apiKey}`).then(currentWeather);
+}
+function search(event) {
+  event.preventDefault();
+  searchCity();
+}
+
+let searchForm = document.querySelector("#search-form");
+searchForm.addEventListener("click", search);
+
+function displayCurrentWeather(response) {
+  document.querySelector("#city").innerHTML = response.data.name;
+  document.querySelector("#temp-now").innerHTML = Math.round(
+    response.data.main.temp
+  );
 }
 
 function searchLocation(position) {
-  let apiKey = "e1dc50a50162a6d23d9d39ff29473802";
+  let apiKey = "29ed711e6c528e8877439d3d2d9efee4";
   let apiUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${position.coords.latitude}&lon=${position.coords.longitude}&appid=${apiKey}&units=metric`;
-  axios.get(apiUrl).then(displayWeatherCondition);
+
+  axios.get(apiUrl).then(displayCurrentWeather);
 }
 
 function getCurrentLocation(event) {
@@ -85,16 +58,5 @@ function getCurrentLocation(event) {
   navigator.geolocation.getCurrentPosition(searchLocation);
 }
 
-function heandleSubmit(event) {
-  event.preventDefault();
-  let city = document.querySelector("#city-input").value;
-  searchCity(city);
-}
-
-let searchForm = document.querySelector("#search-form");
-searchForm.addEventListener("submit", heandleSubmit);
-
-let currentLocationButton = document.querySelector("#current-location-button");
+let currentLocationButton = document.querySelector("#btn-current");
 currentLocationButton.addEventListener("click", getCurrentLocation);
-
-searchCity("New York");
