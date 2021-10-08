@@ -1,113 +1,165 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <title>Real-time Weather</title>
     <meta charset="UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@500&display=swap"
+      rel="stylesheet"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weather</title>
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css"
       rel="stylesheet"
       integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We"
       crossorigin="anonymous"
     />
-    <script
-      src="https://kit.fontawesome.com/313a1b3bb3.js"
-      crossorigin="anonymous"
-    ></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&family=Xanh+Mono:ital@0;1&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="src/styles.css" />
+    <link href="/src/styles.css" rel="stylesheet" />
 
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script
+      src="https://kit.fontawesome.com/cc85df16ae.js"
+      crossorigin="anonymous"
+    ></script>
   </head>
-
   <body>
     <div class="container">
-      <h1 id="city">Tokyo</h1>
-      <div class="row">
-        <div class="col-sm-6">
-          <div class="card current">
-            <div class="card-body">
-              <h2 class="dateTime" id="date-time">Current Day, Time</h2>
-              <h2>
-                <span id="temp-now">20</span><span class="unit">°C</span>
-                <div><i class="fas fa-cloud-showers-heavy showers"></i></div>
-              </h2>
-            </div>
-          </div>
-        </div>
-        <div class="col-sm-6">
-          <div class="card">
-            <div>
-              <ul class="list-group">
-                <li class="list-group-item">
-                  <h5>
-                    <span class="day"> Day 1 </span>
-                    <span class="temperature"> 25° </span>
-                    <span><i class="fas fa-sun sunny"></i></span>
-                  </h5>
-                </li>
-                <li class="list-group-item">
-                  <h5>
-                    <span class="day"> Day 2 </span>
-                    <span class="temperature"> 19° </span>
-                    <span
-                      ><i class="fas fa-cloud-showers-heavy showers"></i
-                    ></span>
-                  </h5>
-                </li>
-                <li class="list-group-item">
-                  <h5>
-                    <span class="day"> Day 3 </span>
-                    <span class="temperature"> 20° </span>
-                    <span><i class="fas fa-cloud cloudy"></i></span>
-                  </h5>
-                </li>
-                <li class="list-group-item">
-                  <h5>
-                    <span class="day"> Day 4 </span>
-                    <span class="temperature"> 22° </span>
-                    <span><i class="fas fa-cloud-sun partly-cloudy"></i></span>
-                  </h5>
-                </li>
-                <li class="list-group-item">
-                  <h5>
-                    <span class="day"> Day 5 </span>
-                    <span class="temperature"> 23° </span>
-                    <span><i class="fas fa-cloud-sun partly-cloudy"></i></span>
-                  </h5>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-      <footer class="footer">
-        <form id="search-form">
+      <h1>Weather</h1>
+
+      <p class="celsius-fahrenheit-block">
+        <span class="celsius">ºC</span>
+        <span class="fahrenheit">ºF</span>
+      </p>
+
+      <div class="search-container">
+        <form class="search-city-form" id="search-form">
           <input
-            id="city-search"
-            type="text"
-            class="form-control.w-50"
-            placeholder="Search City"
-            autocomplete="off"
+            type="search"
+
+            placeholder="Search city..."
+            class="form-control search-city"
             autofocus="on"
+            autocomplete="off"
+            id="city-input"
           />
-          <input type="submit" value="Search" id="btn-search" />
-          <button type="submit" id="btn-current">Current City</button>
+          <input type="submit" value="Search" class="go-button" id="submit-city"/>
+          <button class="btn btn-success"
+          id="current-location-button">Current</button>
         </form>
-      </footer>
-      <div>
-        <small
-          ><a
-            href="https://github.com/JMCoder35/first-weather-project.git"
-            target="_blank"
-            >Open-source code</a
-          >
-          by Dianna Totland</small
-        >
       </div>
-    </div>
-    <script src="src/index.js"></script>
+
+      <div class="place-date-time">
+        <h2 id="city">Salt Lake City</h2>
+        <h3>Monday, September 19th 15:30</h3>
+      </div>
+
+      <div class="current-weather-info">
+        <span class="current-weather-details">
+            <span class="temperature" id="temperature"> 10 </span>
+          <p class="current-max-min-temp" >
+            + <span class="current-max-temp">30º</span> -
+            <span class="current-min-temp">20º</span>
+          </p>
+        
+        </span>
+        <div class="col-7">
+          <ul>
+              Percipatation: 10% 
+              Humidity: <span id="humidity"></span>%
+              Wind: <span id="wind"></span> km/h
+          </ul>
+      </div>
+      </div>
+
+      <hr />
+
+      <div class="weather-days-week-container">
+        <div class="day-1-block">
+          <h4 class="day-1">Tue</h4>
+          <i class="fas fa-cloud-sun" alt="weather for tomorrow"></i>
+          <p class="max-min-temp">
+            +
+            <span class="max-temp-day-1">30º</span>
+            <br />
+            -
+            <span class="min-temp-day-1">20º</span>
+          </p>
+        </div>
+
+        <div class="day-2-block">
+          <h4 class="day-2">Wed</h4>
+          <i
+            class="fas fa-cloud-sun
+            alt="weather for 2 days from now"
+          ></i>
+          <p class="max-min-temp">
+            +
+            <span class="max-temp-day-2">30º</span>
+            <br />
+            -
+            <span class="min-temp-day-2">20º</span>
+          </p>
+        </div>
+
+        <div class="day-3-block">
+          <h4 class="day-3">Thu</h4>
+          <i
+            class="fas fa-cloud-sun"
+            alt="weather for 3 days from now"
+          ></i>
+          <p class="max-min-temp">
+            +
+            <span class="max-temp-day-3">30º</span>
+            <br />
+            -
+            <span class="min-temp-day-3">20º</span>
+          </p>
+        </div>
+
+        <div class="day-4-block">
+          <h4 class="day-4">Fri</h4>
+          <i
+            class="fas fa-cloud-sun"
+            alt="weather for 4 days from now"
+          ></i>
+          <p class="max-min-temp">
+            +
+            <span class="max-temp-day-4">30º</span>
+            <br />
+            -
+            <span class="min-temp-day-4">20º</span>
+          </p>
+        </div>
+
+        <div class="day-5-block">
+          <h4 class="day-5">Sat</h4>
+          <i
+            class="fas fa-cloud-sun"
+            alt="weather for 5 days from now"
+          ></i>
+          <p class="max-min-temp">
+            +
+            <span class="max-temp-day-5">30º</span>
+            <br />
+            -
+            <span class="min-temp-day-5">20º</span>
+          </p>
+        </div>
+        
+      </div>
+    
+
+      <hr />
+    <script src="/src/index.js"></script>
   </body>
 </html>
